@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import './MainPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const SecondPage = (data) => {
+  const history = useNavigate();
   const formData = data;
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [selectedIndividualDocuments, setSelectedIndividualDocuments] = useState([]);
   const [selectedSpecialTrust, setSelectedSpecialTrust] = useState('');
   const [selectedTransferDocuments, setSelectedTransferDocuments] = useState([]);
-
 
   const handleSave = () => {
     const combinedData = {
@@ -36,10 +38,11 @@ const SecondPage = (data) => {
   };
 
   return ( 
-    <div className="container">
-    <h1 className="heading">Second Page</h1>
+    <div className="container page-container">
 
-    <h2>FROM THE LIST BELOW, SELECT THE DOCUMENT(S) OR THE PACKAGE THAT BEST FITS YOUR NEEDS.</h2>
+    <div className='form-container card'>
+
+    <h3>FROM THE LIST BELOW, SELECT THE DOCUMENT(S) OR THE PACKAGE THAT BEST FITS YOUR NEEDS.</h3>
 
     <p>The package or documents selected will dictate the questions that follow.</p>
 
@@ -98,8 +101,13 @@ const SecondPage = (data) => {
 
     <h3>TRUST TRANSFER DOCUMENTS</h3>
     {/* Render the transfer documents options similarly */}
-
-    <button onClick={handleSave}>Save</button>
+    <div className="button-container">
+      <div className="buttons">
+        <button onClick={history(-1)}>Back</button>
+        <button onClick={handleSave}>Save</button>
+      </div>
+    </div>
+    </div>
   </div>
   );
 };
