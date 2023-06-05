@@ -4,6 +4,7 @@ import { statesData } from '../data/statesData';
 import { countiesData } from '../data/countiesData';
 import { countriesData } from '../data/countriesData';
 import SecondPage from '../components/SecondPage';
+import postCustomerData from '../service/service';
 
 const MainPage = () => {
   const [name, setName] = useState({ first: '', middle: '', last: '' });
@@ -71,6 +72,7 @@ const MainPage = () => {
     if(data && !error){
       setIsSecondRedered(true);
     }
+    await postCustomerData(name, address);
  };
 
   const handleReset = () => {
