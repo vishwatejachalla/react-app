@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MainPage.css';
 import { statesData } from '../data/statesData';
 import { countiesData } from '../data/countiesData';
 import { countriesData } from '../data/countriesData';
 import SecondPage from '../components/SecondPage';
-import postCustomerData from '../service/service';
 
 const MainPage = () => {
   const [name, setName] = useState({ first: '', middle: '', last: '' });
@@ -14,8 +13,23 @@ const MainPage = () => {
   const [residency, setResidency] = useState({ state: '', county: '' });
   const [citizenship, setCitizenship] = useState('');
   const [isSecondRendered, setIsSecondRendered] = useState(false);
-  const [mainPageData, setMainPageData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('data');
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setName(parsedData.name);
+      setAddress(parsedData.address);
+      setEmail(parsedData.email);
+      setGender(parsedData.gender);
+      setResidency(parsedData.residency);
+      setCitizenship(parsedData.citizenship);
+    }
+    window.onbeforeunload = () => {
+      localStorage.removeItem('data');
+    };
+  }, []);
 
   const handleNameChange = (event) => {
     const { name, value } = event.target;
@@ -64,14 +78,13 @@ const MainPage = () => {
         residency,
         citizenship,
     }
-    setMainPageData(data);
+    localStorage.setItem('data',JSON.stringify(data));
     const error = await validateForm(data);
     if(error){
       setErrorMessage(error);
     }
     if(data && !error){
-      setIsSecondRedered(true);
-      await postCustomerData(name, address); // TODO: need to move data obj to second page submit button
+      setIsSecondRendered(true);
     }
  };
 
@@ -88,7 +101,7 @@ const MainPage = () => {
   return (
     <>
       {isSecondRendered ? (
-        <SecondPage data={mainPageData} />
+        <SecondPage/>
       ) : (
         <div className="container page-container">
           <h1 className="heading">GM LAW</h1>
@@ -99,7 +112,7 @@ const MainPage = () => {
             </div>
             <div className="form-section">
               <h2>Personal Information</h2>
-              <h3>Your Name*</h3>
+              <h3>Your Name<span className="text-danger">*</span></h3>
               <div className="name-inputs">
                 <input
                   type="text"
@@ -129,7 +142,7 @@ const MainPage = () => {
             </div>
 
             <div className="form-section">
-              <h3>Mailing Address*</h3>
+              <h3>Mailing Address<span className="text-danger">*</span></h3>
               <div className="address-inputs">
                 <input
                   type="text"
@@ -185,8 +198,8 @@ const MainPage = () => {
             </div>
 
             <div className="form-section">
-              <strong>Email* </strong>
-              <input type="text" 
+              <strong>Email <span className="text-danger">*</span></strong>
+              <input type="email" 
               value={email} 
               placeholder='Email'
               onChange={handleEmailChange} 
@@ -196,7 +209,7 @@ const MainPage = () => {
             </div>
 
             <div className="form-section">
-              <strong>Gender* </strong>
+              <strong>Gender<span className="text-danger">*</span> </strong>
               <select 
               value={gender} 
               onChange={handleGenderChange}

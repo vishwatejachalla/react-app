@@ -12,12 +12,12 @@
   }
   
   .heading {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
   }
   
   .subheading {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     text-align: left;
     color: brown;
   }
@@ -123,6 +123,6 @@
     border: none;
   }
 
-  .error-message{
+  .error-message, .text-danger{
     color: red;
   }

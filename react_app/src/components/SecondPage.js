@@ -1,45 +1,40 @@
 import React, { useState } from 'react';
+import MainPage from './MainPage'
 import './MainPage.css';
-import { useNavigate } from 'react-router-dom';
+import postCustomerData from '../service/service';
 
-const SecondPage = (data) => {
-  const history = useNavigate();
-  const formData = data;
+const SecondPage = () => {
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [selectedIndividualDocuments, setSelectedIndividualDocuments] = useState([]);
   const [selectedSpecialTrust, setSelectedSpecialTrust] = useState('');
   const [selectedTransferDocuments, setSelectedTransferDocuments] = useState([]);
+  const [isMainPageRender, setisMainPageRender] = useState(false);
 
-  const handleSave = () => {
-    const combinedData = {
-      ...formData,
+  const handleBack = () =>{
+    setisMainPageRender(true);
+  }
+
+  const handleSave = async () => {
+    const savedData = localStorage.getItem('data');
+    localStorage.setItem('data',
+    {
+      ...savedData,
       selectedPackages,
       selectedIndividualDocuments,
       selectedSpecialTrust,
       selectedTransferDocuments,
-    };
+    });
 
-    fetch('/api/save-data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(combinedData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Data saved successfully:', data);
-        // Handle any further actions or UI updates
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-        // Handle error case
-      });
+    await postCustomerData(localStorage.getItem('data')); // TODO: need to move data obj to second page submit button
   };
 
   return ( 
+    <>
+    {isMainPageRender ? (
+        <MainPage/>
+      ) : (
     <div className="container page-container">
-
+      
     <div className='form-container card'>
 
     <h3>FROM THE LIST BELOW, SELECT THE DOCUMENT(S) OR THE PACKAGE THAT BEST FITS YOUR NEEDS.</h3>
@@ -103,12 +98,13 @@ const SecondPage = (data) => {
     {/* Render the transfer documents options similarly */}
     <div className="button-container">
       <div className="buttons">
-        <button onClick={history(-1)}>Back</button>
+        <button onClick={handleBack}>Back</button>
         <button onClick={handleSave}>Save</button>
       </div>
     </div>
     </div>
-  </div>
+  </div>)}
+  </>
   );
 };
 
