@@ -16,7 +16,7 @@ const MainPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const storedData = localStorage.getItem('data');
+    const storedData = localStorage.getItem('data1');
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setName(parsedData.name);
@@ -27,7 +27,7 @@ const MainPage = () => {
       setCitizenship(parsedData.citizenship);
     }
     window.onbeforeunload = () => {
-      localStorage.removeItem('data');
+      localStorage.removeItem('data1');
     };
   }, []);
 
@@ -78,7 +78,7 @@ const MainPage = () => {
         residency,
         citizenship,
     }
-    localStorage.setItem('data',JSON.stringify(data));
+    localStorage.setItem('data1',JSON.stringify(data));
     const error = await validateForm(data);
     if(error){
       setErrorMessage(error);
