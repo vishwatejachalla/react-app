@@ -15,6 +15,11 @@ const App = () => {
   const handleBackPage = () => {
     setCurrentPage('main');
   }
+  const [currentNum, setCurrentNum] = useState(1);
+
+  const handleNumChange = (num) => {
+    setCurrentNum(num);
+  };
 
   return (
     <>
@@ -25,11 +30,11 @@ const App = () => {
         </div>
       </nav>
       <NotificationBar currentPage={currentPage}  onNext={handleNextPage} onBack={handleBackPage}/>
-      <div class="container">
-        <div class="card">
-            <div class="form">
-              <VerticalProgressBar/>
-              <div class="right-side">
+      <div className="container">
+        <div className="card">
+            <div className="form">
+              <VerticalProgressBar currentNum={currentNum} onNumChange={handleNumChange}/>
+              <div className="right-side">
                 <form id="msform">
                     {currentPage === 'main' && (
                       <fieldset>

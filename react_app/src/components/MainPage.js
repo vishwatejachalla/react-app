@@ -10,7 +10,7 @@ const MainPage = ({ onNextPage }) => {
   const [gender, setGender] = useState('');
   const [residency, setResidency] = useState({ state: '', county: '' });
   const [citizenship, setCitizenship] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState({});
 
 
 
@@ -58,13 +58,27 @@ const MainPage = ({ onNextPage }) => {
     setCitizenship(event.target.value);
   };
 
-  async function validateForm(data) {
-    let errors = '';
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-    if (!data.email) {
-      errors = 'Please enter an email address.';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-      errors = 'Invalid email address.';
+  async function validateForm(data) {
+    debugger
+    const errors = {};
+
+    if (!data.name.first.trim()) {
+      errors.first = 'First name is required';
+    }
+
+    if (!data.name.last.trim()) {
+      errors.last = 'Last name is required';
+    }
+
+    if (!data.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!isValidEmail(email)) {
+      errors.email = 'Invalid email format';
     }
     return errors;
   }
@@ -80,12 +94,14 @@ const MainPage = ({ onNextPage }) => {
     }
     localStorage.setItem('data1',JSON.stringify(data));
     const error = await validateForm(data);
-    if(error){
+    const err = Object.keys(error).length === 0;
+    if(!err){
       setErrorMessage(error);
     }
-    if(data && !error){
+    if(data && err){
       onNextPage();
     }
+    console.log(errorMessage);
  };
 
   const handleReset = () => {
@@ -101,13 +117,11 @@ const MainPage = ({ onNextPage }) => {
   return (
     <>
       <div className='firstPage'>
-        <div className="error-message">
-          <label>{errorMessage}</label>
-        </div>
         <div className="form-section">
           <h2>Personal Information</h2>
           <h3>Your Name<span className="text-danger">*</span></h3>
           <div className="name-inputs">
+            {errorMessage.first && <label id="errors">{errorMessage.first}</label>}
             <input
               type="text"
               name="first"
@@ -115,6 +129,7 @@ const MainPage = ({ onNextPage }) => {
               value={name.first}
               onChange={handleNameChange}
               className="form-control input-3d"
+              required
             />
             <input
               type="text"
@@ -124,6 +139,7 @@ const MainPage = ({ onNextPage }) => {
               onChange={handleNameChange}
               className="form-control input-3d"
             />
+            {errorMessage.last && <label id="errors">{errorMessage.last}</label>}
             <input
               type="text"
               name="last"
@@ -131,6 +147,7 @@ const MainPage = ({ onNextPage }) => {
               value={name.last}
               onChange={handleNameChange}
               className="form-control input-3d"
+              required
             />
           </div>
         </div>
@@ -145,6 +162,7 @@ const MainPage = ({ onNextPage }) => {
               value={address.line1}
               onChange={handleAddressChange}
               className="form-control input-3d"
+              required
             />
             <br />
             <input
@@ -163,6 +181,7 @@ const MainPage = ({ onNextPage }) => {
               value={address.city}
               onChange={handleAddressChange}
               className="form-control input-3d"
+              required
             />
           </div>
           <div className="state-zip">
@@ -171,6 +190,7 @@ const MainPage = ({ onNextPage }) => {
               value={address.state}
               onChange={handleAddressChange}
               className="state-dropdown form-control select-3d"
+              required
             >
               <option value="">State</option>
               {statesData.map((state) => (
@@ -187,12 +207,14 @@ const MainPage = ({ onNextPage }) => {
               value={address.zip}
               onChange={handleAddressChange}
               className="form-control input-3d"
+              required
             />
           </div>
         </div>
 
         <div className="form-section">
           <h3>Email <span className="text-danger">*</span></h3>
+          {errorMessage.email && <label id="errors">{errorMessage.email}</label>}
           <input type="email" 
           value={email} 
           placeholder='Email'

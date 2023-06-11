@@ -150,13 +150,10 @@ text-align: left;
   /*connector not needed before the first step*/
   content: none; 
 }
-/*marking active/completed steps green*/
-/*The number of the step and the connector before it = green*/
 #progressbar li.active:before,  #progressbar li.active:after{
   background: #27AE60;
   color: white;
 }
-
 .navbar-brand-container {
   display: flex;
   justify-content: center;
@@ -197,4 +194,7 @@ text-align: left;
   width:50%;
   height:100%;
   border-radius:20px;
+}
+.text-danger, #errors{
+  color:red;
 }
