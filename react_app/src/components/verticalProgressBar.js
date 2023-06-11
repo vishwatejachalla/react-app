@@ -6,7 +6,7 @@ const VerticalProgressBar = ({ currentNum, onNumChange }) => {
         <>
         <div className="left-side">
             <div className="steps-content">
-                <h3>Step <span className="step-number">1</span></h3>
+                <h3>Step <span className="step-number">{currentNum}</span></h3>
                 <p className="step-number-content active">Enter your personal information to get closer to companies.</p>
                 <p className="step-number-content d-none">Get to know better by adding your diploma,certificate and education life.</p>
                 <p className="step-number-content d-none">Help companies get to know you better by telling then about your past experiences.</p>
