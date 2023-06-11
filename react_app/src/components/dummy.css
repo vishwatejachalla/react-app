@@ -126,3 +126,28 @@
   .error-message, .text-danger{
     color: red;
   }
+
+  .page-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left; 
+    height: 100vh;
+    justify-content: space-between;
+    box-sizing: border-box; /* Add this to include padding in height calculation */
+  }
+
+  .form-container {
+    border: 1px solid #343a40;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  .heading {
+    margin-bottom: 20px;
+    text-align: center;
+  }
